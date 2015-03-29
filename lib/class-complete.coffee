@@ -10,5 +10,4 @@ module.exports =
                 \t\n
                 \t}\n
                 \n
-                \treturn Class;\n
-            }());")
+                \treturn Class;\n}());")
