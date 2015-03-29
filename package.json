@@ -5,8 +5,8 @@
   "description": "An easy to use package for quickly creating JavaScript classes",
   "activationEvents": [
     "class-complete:complete"
-  ],
   "repository": "https://github.com/nozzergaming/class-complete",
+  ],
   "license": "MIT",
   "engines": {
     "atom": ">=0.174.0 <2.0.0"
