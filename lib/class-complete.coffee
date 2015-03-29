@@ -4,10 +4,10 @@ module.exports =
 
     complete: ->
         editor = atom.workspace.activePaneItem
-        editor.insertText("
-            Class = (function() {\n
-                \tfunction Class() {\n
+        className = editor.getWordUnderCursor()
+        editor.insertText(" = (function() {\n
+                \tfunction " + className + "() {\n
                 \t\n
                 \t}\n
                 \n
-                \treturn Class;\n}());")
+                \treturn " + className + ";\n}());")
