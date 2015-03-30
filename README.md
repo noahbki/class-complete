@@ -2,4 +2,36 @@
 
 An easy to use package for quickly creating JavaScript classes.
 
+## Usage
+
+### Without parameters
+```
+Class <ctrl-shift-space>
+```
+generates
+```javascript
+Class = (function() {
+    function Class() {
+
+    }
+
+    return Class;
+}());
+```
+
+### With parameters
+```
+Class:far,boo,apples <ctrl-shift-space>
+```
+generates
+```javascript
+Class = (function() {
+    function Class(far, boo, apples) {
+
+    }
+
+    return Class;
+}());
+```
+
 ![A screenshot of your package](http://i.imgur.com/cQCvAAz.png)
