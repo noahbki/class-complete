@@ -21,12 +21,12 @@ Class = (function() {
 
 ### With parameters
 ```
-Class:far,boo,apples <ctrl-shift-space>
+Class:foo,boo,apples <ctrl-shift-space>
 ```
 generates
 ```javascript
 Class = (function() {
-    function Class(far, boo, apples) {
+    function Class(foo, boo, apples) {
 
     }
 
