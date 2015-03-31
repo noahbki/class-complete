@@ -1,7 +1,7 @@
 {
   "name": "class-complete",
   "main": "./lib/class-complete",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "An easy to use package for quickly creating JavaScript classes",
   "activationEvents": [
     "class-complete:complete"
