@@ -21,16 +21,34 @@ Class = (function() {
 
 ### With parameters
 ```
-Class:foo,boo,apples <ctrl-shift-space>
+Class:foo,bar,apples <ctrl-shift-space>
 ```
 generates
 ```javascript
 Class = (function() {
-    function Class(foo, boo, apples) {
+    function Class(foo, bar, apples) {
 
     }
 
     return Class;
+}());
+```
+
+### Extending classes
+```
+Class:foo,bar,apples:Vector <ctrl-shift-space>
+```
+generates
+```javascript
+Class = (function() {
+	function Class(foo, bar, apples) {
+		Vector.apply(this);
+	}
+
+	Class.prototype = Object.create(Vector.prototype);
+	Class.prototype.constructor = Class
+
+	return Class;
 }());
 ```
 
