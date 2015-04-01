@@ -34,7 +34,7 @@ module.exports =
 
         editor.insertText(") {\n")
         `if(shouldProto) {
-            editor.insertText("\t\t" + splitText[2] + ".apply(this);\n");
+            editor.insertText("\t\t" + splitText[2] + ".apply(this, arguments);\n");
         }`
         editor.insertText("\t}\n")
         `if(shouldProto) {
