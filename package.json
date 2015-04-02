@@ -1,11 +1,11 @@
 {
   "name": "class-complete",
   "main": "./lib/class-complete",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "An easy to use package for quickly creating JavaScript classes",
   "activationEvents": [
-      "application:open",
-      "class-complete:complete"
+    "application:open",
+    "class-complete:complete"
   ],
   "repository": "https://github.com/nozzergaming/class-complete",
   "license": "MIT",
