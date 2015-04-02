@@ -1,8 +1,21 @@
 module.exports =
+    configDefaults:
+        defaultJSPath: "assets/js/"
+
+
     activate: ->
+        console.log("Class Complete package has activated! :D")
         atom.workspaceView.command "class-complete:complete", => @complete()
 
-    complete: ->
+    completeSrc: (cursor, editor, text) ->
+        splitText = text.split(":")
+        path = splitText[1]
+        editor.selectToBeginningOfLine()
+        editor.insertText("<script type=\"text/javascript\" src=\""
+            + atom.config.get("class-complete.defaultJSPath") + path
+            + ".js\"></script>\n")
+
+    completeClass: ->
         editor = atom.workspace.getActivePaneItem()
         cursor = editor.getCursor()
         text = cursor.getCurrentBufferLine().trim()
@@ -10,14 +23,12 @@ module.exports =
         className = splitText[0]
 
         parameters = null;
-        `if(typeof splitText[1] != "undefined") {
+        if typeof splitText[1] != "undefined"
             parameters = splitText[1].split(",")
-        }`
 
         shouldProto = false
-        `if(typeof splitText[2] != "undefined") {
+        if typeof splitText[2] != "undefined"
             shouldProto = true
-        }`
 
         editor.selectToBeginningOfLine()
         editor.insertText(className + " = (function() {\n")
@@ -31,17 +42,31 @@ module.exports =
             }
         }`
 
-
         editor.insertText(") {\n")
-        `if(shouldProto) {
-            editor.insertText("\t\t" + splitText[2] + ".apply(this, arguments);\n");
-        }`
+        if shouldProto
+            editor.insertText("\t\t" + splitText[2]
+                + ".apply(this, arguments);\n");
+
         editor.insertText("\t}\n")
-        `if(shouldProto) {
+
+        if shouldProto
             editor.insertText("\n");
-            editor.insertText("\t" + className + ".prototype = Object.create(" + splitText[2] + ".prototype);\n");
-            editor.insertText("\t" + className + ".prototype.constructor = " + className + ";\n");
-        }`
+            editor.insertText("\t" + className
+                + ".prototype = Object.create(" + splitText[2]
+                + ".prototype);\n");
+            editor.insertText("\t" + className
+                + ".prototype.constructor = " + className + ";\n");
+
         editor.insertText("\n")
         editor.insertText("\treturn " + className + ";")
         editor.insertText("\n}());")
+
+    complete: ->
+        editor = atom.workspace.getActivePaneItem()
+        cursor = editor.getCursor()
+        text = cursor.getCurrentBufferLine().trim()
+        splitText = text.split(":")
+        if splitText[0].toLowerCase() == "src"
+            @completeSrc(cursor, editor, text)
+        else
+            @completeClass()
