@@ -10,7 +10,7 @@
   {
     'label': 'Packages'
     'submenu': [
-      'label': 'class-complete'
+      'label': 'Class Complete'
       'submenu': [
         {
           'label': 'Toggle'
