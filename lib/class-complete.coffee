@@ -1,12 +1,13 @@
 module.exports =
     activate: ->
-        console.log("Class Complete package has activated! :D")
-        atom.workspaceView.command "class-complete:complete", => @complete()
+        # atom.workspaceView.command "class-complete:complete", => @complete()
+        atom.commands.add "atom-workspace",
+            "class-complete:complete": => @complete()
 
     complete: ->
         buffer = ""
         editor = atom.workspace.getActivePaneItem()
-        cursor = editor.getCursor()
+        cursor = editor.cursors[0];
         text = cursor.getCurrentBufferLine().trim()
         split = text.split ":"
         className = split[0]

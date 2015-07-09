@@ -3,10 +3,9 @@
   "main": "./lib/class-complete",
   "version": "3.0.1",
   "description": "An easy to use package for quickly creating JavaScript classes",
-  "activationEvents": [
-    "application:open",
-    "class-complete:complete"
-  ],
+  "activationCommands": {
+    "atom-text-editor": ["application:open", "atom-text-editor", "class-complete:complete"]
+  },
   "repository": "https://github.com/nozzergaming/class-complete",
   "license": "MIT",
   "engines": {
