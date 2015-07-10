@@ -2,7 +2,7 @@
   "name": "class-complete",
   "main": "./lib/class-complete",
   "version": "3.1.0",
-  "description": "An easy to use package for quickly creating JavaScript classes",
+  "description": "Easily create JavaScript classes and methods.",
   "activationCommands": {
     "atom-text-editor": [
       "application:open",
@@ -15,5 +15,13 @@
   "engines": {
     "atom": "*"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "keywords": [
+      "javascript",
+      "class",
+      "completete",
+      "completion",
+      "shorthand",
+      "colgan"
+  ]
 }
