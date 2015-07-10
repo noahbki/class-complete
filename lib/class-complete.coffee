@@ -16,7 +16,6 @@ module.exports =
         if split[1]
             for param in split[1].split ","
                 parameters.push param.trim() if param.trim()
-        console.log split
 
         cursor.moveToEndOfLine()
         editor.selectToBeginningOfLine()
