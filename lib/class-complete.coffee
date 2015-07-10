@@ -16,6 +16,7 @@ module.exports =
         if split[1]
             for param in split[1].split ","
                 parameters.push param.trim() if param.trim()
+        console.log split
 
         cursor.moveToEndOfLine()
         editor.selectToBeginningOfLine()
@@ -31,12 +32,12 @@ module.exports =
                     buffer += parameters[param] + ", " if parameters[param]
 
         buffer += ") {\n"
-        if split.length > 1
+        if split.length > 2
             buffer += "\t\t#{split[2]}.apply(this, arguments);\n"
 
         buffer += "\t}\n"
 
-        if split.length > 1
+        if split.length > 2
             buffer += "\n"
             buffer += "\t#{className}.prototype = Object.create(#{split[2]}.prototype);\n"
             buffer += "\t#{className}.prototype.constructor = #{className};\n"
