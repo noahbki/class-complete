@@ -22,7 +22,7 @@ module.exports =
         editor.selectToBeginningOfLine()
 
         buffer += "#{className} = (function() {\n"
-        buffer += "\tfunction " + className + "("
+        buffer += "\tfunction #{className}("
 
         if parameters
             for param in [0..parameters.length - 1]
