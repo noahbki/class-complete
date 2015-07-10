@@ -44,6 +44,6 @@ module.exports =
 
         buffer += "\n"
         buffer += "\treturn #{className};"
-        buffer += "\n)());"
+        buffer += "\n}());"
 
         editor.insertText buffer
