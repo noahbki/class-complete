@@ -15,7 +15,7 @@ module.exports =
         cursor.moveToEndOfLine()
         editor.selectToBeginningOfLine()
 
-        buffer += "#{classdef.name} = (function() {\n"
+        buffer += "#{classdef.fullname} = (function() {\n"
 
         buffer += module.exports.indent(module.exports.generateMethod(classdef.name, null, classdef.parameters, "constructor", {
             "before": "#{classdef.extends}.apply(this, arguments);" if classdef.extends
@@ -44,11 +44,14 @@ module.exports =
         # <class_name>:<arguments>,...;<methods>,...:<extend>
 
         def = {
+            fullname: null
             name: null,
             parameters: [],
             methods: [],
             extends: null
         }
+
+        def.fullname = string.split(":")[0]
 
         string = string.split(".")
         string = string[string.length - 1]
