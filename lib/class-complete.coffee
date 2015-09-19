@@ -8,12 +8,9 @@ module.exports =
         buffer = ""
         editor = atom.workspace.getActivePaneItem()
         cursor = editor.cursors[0]
-        text = cursor.getCurrentBufferLine().trim()
+        text = editor.getSelections()[0].getText()
 
         classdef = module.exports.parseClassdef(text)
-
-        cursor.moveToEndOfLine()
-        editor.selectToBeginningOfLine()
 
         buffer += "#{classdef.fullname} = (function() {\n"
 
@@ -53,8 +50,6 @@ module.exports =
 
         def.fullname = string.split(":")[0]
 
-        string = string.split(".")
-        string = string[string.length - 1]
         string = string.replace(/\s/g, "")
         parts = string.split(":")
 
