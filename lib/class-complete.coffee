@@ -164,7 +164,7 @@ module.exports =
                     buffer += "\tif (typeof #{param.name} !== \"#{param.type}\") throw new Error(\"Parameter '#{param.name}' expects to be type '#{param.type}'\");\n"
                 if param.instance
                     checks = true
-                    buffer += "\tif (#{param.name} instanceof #{param.instance}) throw new Error(\"Parameter '#{param.name}' expects to be instance of '#{param.instance}'\");\n"
+                    buffer += "\tif (!(#{param.name} instanceof #{param.instance})) throw new Error(\"Parameter '#{param.name}' expects to be instance of '#{param.instance}'\");\n"
 
 
         if parameters.length > 0 && members

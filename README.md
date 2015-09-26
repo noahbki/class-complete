@@ -89,7 +89,7 @@ The classdef `Class:a^Class2` becomes:
 ```javascript
 Class = (function() {
 	function Class(a) {
-		if (a instanceof Class2) throw new Error("Parameter 'a' expects to be instance of 'Class2'");
+		if (!(a instanceof Class2)) throw new Error("Parameter 'a' expects to be instance of 'Class2'");
 	};
 
 	return Class;
