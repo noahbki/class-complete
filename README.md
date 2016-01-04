@@ -165,7 +165,7 @@ Class = (function() {
 
 ### All together
 
-the classdef `Person:@name!string,@age!number;setName+@name!string/setAge+@age!number/hello+name!string:Homosapian` becomes:
+The classdef `Person:@name!string,@age!number;setName+@name!string/setAge+@age!number/hello+name!string:Homosapian` becomes:
 
 ```javascript
 Person = (function() {
@@ -200,4 +200,18 @@ Person = (function() {
 
 	return Person;
 }());
+```
+
+### RequireJS
+
+The line `r:express` becomes:
+```javascript
+var express = require("express");
+```
+
+### RequireJS with different filenames/formats
+
+Ths line `r:express:Marshmallow.js` becomes:
+```javascript
+var express = require("Marshmallow.js");
 ```
