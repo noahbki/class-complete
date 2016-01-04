@@ -1,3 +1,4 @@
+
 module.exports =
     activate: ->
         # atom.workspaceView.command "class-complete:complete", => @complete()
@@ -10,30 +11,40 @@ module.exports =
         cursor = editor.cursors[0]
         text = editor.getSelections()[0].getText()
 
+        # Parse classdef to find out what needs to be generated
         classdef = module.exports.parseClassdef(text)
 
-        buffer += "#{classdef.fullname} = (function() {\n"
+        if classdef.type == "class"
 
-        buffer += module.exports.indent(module.exports.generateMethod(classdef.name, null, classdef.parameters, "constructor", {
-            "before": "#{classdef.extends}.apply(this, arguments);" if classdef.extends
-        }), 1)
+            # Start the class
+            buffer += "#{classdef.fullname} = (function() {\n"
 
-        if classdef.extends
+            # Indent and generate all methods needed
+            buffer += module.exports.indent(module.exports.generateMethod(classdef.name, null, classdef.parameters, "constructor", {
+                "before": "#{classdef.extends}.apply(this, arguments);" if classdef.extends
+            }), 1)
+
+            # If classdef extends another class, add appropriate code
+            if classdef.extends
+                buffer += "\n"
+                buffer += "\t#{classdef.name}.prototype = Object.create(#{classdef.extends}.prototype);\n"
+                buffer += "\t#{classdef.name}.prototype.constructor = #{classdef.name};\n"
+
+            if classdef.methods.length > 0
+                for method in [0..classdef.methods.length - 1]
+                    if method >= 0
+                        buffer += "\n"
+
+                    method = classdef.methods[method]
+                    buffer += module.exports.indent(module.exports.generateMethod(classdef.name, method.name, method.parameters, method.type), 1)
+
             buffer += "\n"
-            buffer += "\t#{classdef.name}.prototype = Object.create(#{classdef.extends}.prototype);\n"
-            buffer += "\t#{classdef.name}.prototype.constructor = #{classdef.name};\n"
+            buffer += "\treturn #{classdef.name};"
+            buffer += "\n}());"
 
-        if classdef.methods.length > 0
-            for method in [0..classdef.methods.length - 1]
-                if method >= 0
-                    buffer += "\n"
-
-                method = classdef.methods[method]
-                buffer += module.exports.indent(module.exports.generateMethod(classdef.name, method.name, method.parameters, method.type), 1)
-
-        buffer += "\n"
-        buffer += "\treturn #{classdef.name};"
-        buffer += "\n}());"
+        else if classdef.type == "require"
+                buffer += "var #{classdef.varName} = require(\"#{classdef.path}\");"
+                buffer += "\n"
 
         editor.insertText buffer
 
@@ -45,10 +56,28 @@ module.exports =
             name: null,
             parameters: [],
             methods: [],
-            extends: null
+            extends: null,
+            type: "class",
+            varName : null,
+            path: null
         }
 
-        def.fullname = string.split(":")[0]
+        fullname = string.split(":")[0]
+
+        def.fullname = fullname
+
+        if (fullname.toLowerCase() == "r")
+            varName = string.split(":")[1]
+            path = string.split(":")[2]
+            def.type = "require"
+            def.varName = varName
+            def.path = ((path != null) ? path : varName);
+            if typeof path != "undefined" && path.length > 0
+                def.path = path
+            else
+                def.path = varName
+
+            return def
 
         string = string.replace(/\s/g, "")
         parts = string.split(":")
