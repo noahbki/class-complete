@@ -1,7 +1,7 @@
 {
   "name": "class-complete",
   "main": "./lib/class-complete",
-  "version": "5.0.2",
+  "version": "5.0.3",
   "description": "Easily create JavaScript classes and methods.",
   "activationCommands": {
     "atom-text-editor": [
