@@ -25,7 +25,6 @@ module.exports =
         classdef = module.exports.parseClassdef(text)
 
         if classdef.type == "class"
-
             # Start the class
             buffer += "#{classdef.fullname} = (function() {\n"
 
@@ -53,8 +52,9 @@ module.exports =
             buffer += "\n}());"
 
         else if classdef.type == "require"
-                buffer += "var #{classdef.varName} = require(\"#{classdef.path}\");"
-                buffer += "\n"
+                for line in classdef.requireLines
+                    buffer += "var #{line.varName} = require(\"#{line.path}\");"
+                    buffer += "\n"
 
         editor.insertText buffer
 
@@ -68,8 +68,7 @@ module.exports =
             methods: [],
             extends: null,
             type: "class",
-            varName : null,
-            path: null
+            requireLines: []
         }
 
         fullname = string.split(":")[0]
@@ -77,15 +76,21 @@ module.exports =
         def.fullname = fullname
 
         if (fullname.toLowerCase() == "r")
-            varName = string.split(":")[1]
-            path = string.split(":")[2]
+            lines = string.split("\n")
+            i = 0
+            while i < lines.length
+                line = {}
+                line.varName = string.split(":")[1]
+                path = string.split(":")[2]
+                line.path = ((path != null) ? path : line.varName);
+                if typeof path != "undefined" && path.length > 0
+                    line.path = path
+                else
+                    line.path = line.varName
+
+                def.requireLines.push(line)
             def.type = "require"
-            def.varName = varName
-            def.path = ((path != null) ? path : varName);
-            if typeof path != "undefined" && path.length > 0
-                def.path = path
-            else
-                def.path = varName
+            console.log lines
 
             return def
 
