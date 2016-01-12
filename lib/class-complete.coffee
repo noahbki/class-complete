@@ -1,7 +1,7 @@
 
 module.exports =
+
     activate: ->
-        # atom.workspaceView.command "class-complete:complete", => @complete()
         atom.commands.add "atom-workspace",
             "class-complete:complete": => @complete()
 
@@ -10,6 +10,16 @@ module.exports =
         editor = atom.workspace.getActivePaneItem()
         cursor = editor.cursors[0]
         text = editor.getSelections()[0].getText()
+
+        @tabString = "\t";
+        tabLength = atom.config.get("editor.tabLength")
+        if atom.config.get("editor.tabType") == "soft" or atom.config.get("editor.tabType") == "auto"
+            @tabString = ""
+            i = 0
+            while i < 4
+                i++
+                @tabString += " "
+
 
         # Parse classdef to find out what needs to be generated
         classdef = module.exports.parseClassdef(text)
@@ -27,8 +37,8 @@ module.exports =
             # If classdef extends another class, add appropriate code
             if classdef.extends
                 buffer += "\n"
-                buffer += "\t#{classdef.name}.prototype = Object.create(#{classdef.extends}.prototype);\n"
-                buffer += "\t#{classdef.name}.prototype.constructor = #{classdef.name};\n"
+                buffer += "#{@tabString}#{classdef.name}.prototype = Object.create(#{classdef.extends}.prototype);\n"
+                buffer += "#{@tabString}#{classdef.name}.prototype.constructor = #{classdef.name};\n"
 
             if classdef.methods.length > 0
                 for method in [0..classdef.methods.length - 1]
@@ -39,7 +49,7 @@ module.exports =
                     buffer += module.exports.indent(module.exports.generateMethod(classdef.name, method.name, method.parameters, method.type), 1)
 
             buffer += "\n"
-            buffer += "\treturn #{classdef.name};"
+            buffer += "#{@tabString}return #{classdef.name};"
             buffer += "\n}());"
 
         else if classdef.type == "require"
@@ -190,10 +200,10 @@ module.exports =
 
                 if param.type
                     checks = true
-                    buffer += "\tif (typeof #{param.name} !== \"#{param.type}\") throw new Error(\"Parameter '#{param.name}' expects to be type '#{param.type}'\");\n"
+                    buffer += "#{@tabString}if (typeof #{param.name} !== \"#{param.type}\") throw new Error(\"Parameter '#{param.name}' expects to be type '#{param.type}'\");\n"
                 if param.instance
                     checks = true
-                    buffer += "\tif (!(#{param.name} instanceof #{param.instance})) throw new Error(\"Parameter '#{param.name}' expects to be instance of '#{param.instance}'\");\n"
+                    buffer += "#{@tabString}if (!(#{param.name} instanceof #{param.instance})) throw new Error(\"Parameter '#{param.name}' expects to be instance of '#{param.instance}'\");\n"
 
 
         if parameters.length > 0 && members
@@ -201,13 +211,13 @@ module.exports =
             for param in [0..parameters.length - 1]
                 param = parameters[param]
                 if param.member
-                    buffer += "\tthis.#{param.name} = #{param.name};\n"
+                    buffer += "#{@tabString}this.#{param.name} = #{param.name};\n"
 
         if body.after
             buffer += "\n" if checks || members
             buffer += "#{module.exports.indent(body.after, 1)}"
 
-        buffer += "};"
+        buffer += "}"
 
         return buffer
 
@@ -216,7 +226,7 @@ module.exports =
         lines = text.split(/\n|\r\n/)
 
         prefix = ""
-        prefix += "\t" for i in [0..indent - 1]
+        prefix += "#{@tabString}" for i in [0..indent - 1]
 
         for line in lines
             buffer += prefix + line + "\n"
