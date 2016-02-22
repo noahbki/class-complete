@@ -1,5 +1,6 @@
 
 class Complete
+
     constructor: ->
         @tabString = "\t";
         tabLength = atom.config.get("editor.tabLength")
@@ -10,12 +11,14 @@ class Complete
                 i++
                 @tabString += " "
 
+        # Accepts an object
+        # "<filetype>": require "./templates/<pathtotemplate>.coffee
         @templates = {
             "js": {
-                "filetypes": [
-                    ".js"
-                ],
                 "complete": require "./templates/javascript.coffee"
+            },
+            "coffee": {
+                "complete": require "./templates/coffee.coffee"
             }
         }
 
@@ -32,26 +35,32 @@ class Complete
         cursor = editor.cursors[0]
         text = editor.getSelections()[0].getText()
 
-        # Parse classdef to find out what needs to be generated
         classdef = @parseClassdef(text)
+        console.log classdef
 
-        fileName = editor.getFileName().split(".")[..].pop()
-        console.log fileName
-
-        buffer = @templates["js"].generateClass(classdef)
+        fileName = editor.getFileName()
+        if fileName
+            fileName = fileName.split(".")[..].pop()
+            completed = false
+            for key of @templates
+                if key == fileName.toLowerCase()
+                    buffer += @templates[key].complete.generateClass(classdef)
+                    completed = true
+            if !completed
+                buffer += @templates["js"].complete.generateClass(classdef)
+        else
+            buffer += @templates["js"].complete.generateClass(classdef)
 
         editor.insertText buffer
 
     parseClassdef: (string) ->
         # <class_name>:<arguments>,...;<methods>,...:<extend>
-
         def = {
             fullname: null
             name: null,
             parameters: [],
             methods: [],
-            extends: null,
-            requireLines: []
+            extends: null
         }
 
         fullname = string.split(":")[0]

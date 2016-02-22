@@ -4,8 +4,6 @@ class Template
         @tabString = "\t" # Defaults to this
 
     indent: (text, indent) ->
-        console.log text
-        console.log indent
         buffer = ""
         lines = text.split(/\n|\r\n/)
 

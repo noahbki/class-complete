@@ -1,61 +1,37 @@
 
 # Class Complete
 
-Class Complete is a plugin for Atom, that allows the user to easily generate classes.
-
-## Table of Contents
-- [How-To](#how-to)
-	- [Parameters](#parameters)
-	- [Methods](#methods)
-	- [Extending Classes](#extending)
-- [Examples](#examples)
-    - [Class](#simple-class-creation)
-    - [Class with parameters](#class-with-parameters)
-    - [Class with member parameters](#class-with-member-parameters)
-    - [Class with type checking](#class-with-parameters-and-type-checking)
-    - [Class with instance checking](#checking-instance)
- - [Examples with Methods](#class-with-methods)
-    - [Member method](#member-method)
-    - [Static method](#static-method)
-    - [Member methods and parameters](#member-method-with-parameters)
-    - [Extending classes](#extending-classes)
-    - [All together](#all-together)
-
-## Contributing
-In the future, it will be easier to contribute to it's development. For now please read CONTRIBUTING.md.
+Class Complete is a package for Atom that makes the creation of JavaScript classes easier than ever.
 
 ## How-to
+
 All you need to write is a classdef
 (Class Definition) that describes the class you want to create, select it, then press `<ctrl-shift-space>`.
 
 The basic structure of a classdef is as follows: `<class_name>:<parameters>;<methods>:<extending_class_name>`.
 
 ### Parameters
-The `<parameter>` section is structured as follows: `(@)<name>((!|^)<(type|instance)>), ...`.
 
- - `@` - Argument will become a member variable.
- - `!<type>` - Ensure the argument is the correct type
- - `^<instance>` - Ensure the argument is the correct instance
+The `<parameter>` section is structured as follows: `(@)<name>((!|^)<(type|instance)>), ...`.  If you place a `@` at the beginning of the parameter it will add the argument as a member variable with the same name.  If you add `!<type>` to the end of your parameter then an if block will be added to the top of the created constructor or function that checks if the type of the parameter is the `<type>` specified; if you add `^<instance>` then the if will check if the parameter is the same `<instance>`.
 
 ### Methods
-The `<methods>` section is structured as follows: `(@)<name>(+<arguments>, ...)/...`.  
- - `@` - The method is static
- 	- Leaving this blank with make it a member
+
+The `<methods>` section is structured as follows: `(@)<name>(+<arguments>, ...)/...`.  If you place a `@` at the beginning of the method the the generated method will be a static method whereas without it would be a member.
 
 ### Extending
+
 The `<extending_class_name>` section defines the class that the new class will extend.
 
 ## Examples
 
 ### Simple class creation
-*These examples are for JavaScript.*
 
 The classdef `Class` becomes:
 
 ```javascript
 Class = (function() {
 	function Class() {
-	}
+	};
 
 	return Class;
 }());
@@ -68,7 +44,7 @@ The classdef `Class:a,b,c` becomes:
 ```javascript
 Class = (function() {
 	function Class(a, b, c) {
-	}
+	};
 
 	return Class;
 }());
@@ -84,7 +60,7 @@ Class = (function() {
 		this.a = a;
 		this.b = b;
 		this.c = c;
-	}
+	};
 
 	return Class;
 }());
@@ -100,7 +76,7 @@ The classdef `Class:a!string` becomes:
 Class = (function() {
 	function Class(a) {
 		if (typeof a !== "string") throw new Error("Parameter 'a' expects to be type 'string'");
-	}
+	};
 
 	return Class;
 }());
@@ -114,7 +90,7 @@ The classdef `Class:a^Class2` becomes:
 Class = (function() {
 	function Class(a) {
 		if (!(a instanceof Class2)) throw new Error("Parameter 'a' expects to be instance of 'Class2'");
-	}
+	};
 
 	return Class;
 }());
@@ -129,7 +105,7 @@ The classef `Class:;hello` becomes:
 ```javascript
 Class = (function() {
 	function Class() {
-	}
+	};
 
 	Class.prototype.hello = function() {
 	};
@@ -145,7 +121,7 @@ The classdef `Class:;@hello` becomes:
 ```javascript
 Class = (function() {
 	function Class() {
-	}
+	};
 
 	Class.hello = function() {
 	};
@@ -161,7 +137,7 @@ The classdef `Class:;hello+name,age` becomes:
 ```javascript
 Class = (function() {
 	function Class() {
-	}
+	};
 
 	Class.prototype.hello = function(name, age) {
 	};
@@ -178,7 +154,7 @@ The classdef `Class::Class2` becomes:
 Class = (function() {
 	function Class() {
 		Class2.apply(this, arguments);
-	}
+	};
 
 	Class.prototype = Object.create(Class2.prototype);
 	Class.prototype.constructor = Class;
@@ -201,7 +177,7 @@ Person = (function() {
 
 		this.name = name;
 		this.age = age;
-	}
+	};
 
 	Person.prototype = Object.create(Homosapian.prototype);
 	Person.prototype.constructor = Person;
@@ -224,4 +200,18 @@ Person = (function() {
 
 	return Person;
 }());
+```
+
+### RequireJS
+
+The line `r:express` becomes:
+```javascript
+var express = require("express");
+```
+
+### RequireJS with different filenames/formats
+
+Ths line `r:express:Marshmallow.js` becomes:
+```javascript
+var express = require("Marshmallow.js");
 ```
