@@ -2,7 +2,7 @@
   "name": "class-complete",
   "main": "./lib/class-complete",
   "version": "6.0.0",
-  "description": "Easily create JavaScript classes and methods.",
+  "description": "Easily generate classes and methods.",
   "activationCommands": {
     "atom-text-editor": [
       "application:open",
