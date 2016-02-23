@@ -1,22 +1,3 @@
 # See https://atom.io/docs/latest/hacking-atom-package-word-count#menus for more details
-'context-menu':
-  'atom-text-editor': [
-    {
-      'label': 'Toggle class-complete'
-      'command': 'class-complete:toggle'
-    }
-  ]
-'menu': [
-  {
-    'label': 'Packages'
-    'submenu': [
-      'label': 'Class Complete'
-      'submenu': [
-        {
-          'label': 'Toggle'
-          'command': 'class-complete:toggle'
-        }
-      ]
-    ]
-  }
-]
+'atom-text-editor':
+    'ctrl-shift-space': 'class-complete:complete'

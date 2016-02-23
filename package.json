@@ -1,26 +1,27 @@
 {
-  "name": "class-complete",
-  "main": "./lib/class-complete",
-  "version": "6.1.0",
-  "description": "Easily generate classes and methods.",
-  "activationCommands": {
-    "atom-text-editor": [
-      "application:open",
-      "atom-text-editor",
-      "class-complete:complete"
-    ]
-  },
-  "repository": "https://github.com/nozzergaming/class-complete",
-  "license": "MIT",
-  "engines": {
-    "atom": "*"
-  },
-  "dependencies": {},
-  "keywords": [
-    "class",
-    "complete",
-    "completion",
-    "parameters",
-    "functions"
-  ]
+	"name": "class-complete",
+	"main": "./lib/class-complete",
+	"version": "6.1.0",
+	"description": "Easily generate classes and methods.",
+	"repository": "https://github.com/anotherfrog/class-complete",
+	"license": "MIT",
+	"engines": {
+		"atom": "*"
+	},
+	"dependencies": {},
+	"keywords": [
+		"class",
+		"complete",
+		"completion",
+		"parameters",
+		"functions"
+	],
+	"providedServices": {
+		"classcomplete": {
+			"description": "Easily creates classes from a classdef",
+			"versions": {
+				"1.0.0": "provideClasscomplete"
+			}
+		}
+	}
 }

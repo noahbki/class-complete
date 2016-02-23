@@ -1,10 +1,8 @@
 
-Template = require "./template.coffee"
-
-class CoffeeTemplate extends Template
+class CoffeeTemplate
 
     constructor: ->
-        super
+        @tabString = "\t"
 
     generateClass: (classdef) ->
         buffer = ""
@@ -71,6 +69,18 @@ class CoffeeTemplate extends Template
         if body.after
             buffer += "\n" if checks || members
             buffer += "#{@indent(body.after, 1)}"
+
+        return buffer
+
+    indent: (text, indent) ->
+        buffer = ""
+        lines = text.split(/\n|\r\n/)
+
+        prefix = ""
+        prefix += "#{@tabString}" for i in [0..indent - 1]
+
+        for line in lines
+            buffer += prefix + line + "\n"
 
         return buffer
 

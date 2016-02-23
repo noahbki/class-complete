@@ -2,12 +2,12 @@
 # ToDo
 
 ## ToDo
- - Modular support for different classes. This needs to be more user friendly.
- - Automatically select class structure(?) based on file. (Allow this to be changed)
-
+ - Indent thing without having to inherit method
+ 
 ## Working on
- - JS Rewrite
- - (bad) Modular support
+ - Modular support for different classes. This needs to be more user friendly.
 
 ## Finished
  - Fancy ToDo
+ - (bad) Modular support
+ - Automatically select class structure(?) based on file. (Allow this to be changed)

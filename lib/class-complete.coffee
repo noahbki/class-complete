@@ -1,7 +1,9 @@
 
-class Complete
+CompleteHandler = require "./complete-handler.coffee"
 
+class Complete
     constructor: ->
+        @completeHandler = new CompleteHandler
         @tabString = "\t";
         tabLength = atom.config.get("editor.tabLength")
         if atom.config.get("editor.tabType") != "hard"
@@ -13,137 +15,41 @@ class Complete
 
         # Accepts an object
         # "<filetype>": require "./templates/<pathtotemplate>.coffee
-        @templates = {
-            "js": {
-                "complete": require "./templates/javascript.coffee"
-            },
-            "coffee": {
-                "complete": require "./templates/coffee.coffee"
-            }
-        }
+        @templates =
+            "js":
+                "complete":
+                    require "./templates/javascript.coffee"
+                "fileTypes":
+                    ["js"]
+
+            "coffee":
+                "complete":
+                    require "./templates/coffee.coffee"
+                "fileTypes":
+                    ["coffee"]
 
         for template in @templates
             template.tabString = @tabString
 
+    complete: ->
+        @completeHandler.complete(@)
+
     activate: ->
+        console.log "Activated Class Complete!"
         atom.commands.add "atom-workspace",
             "class-complete:complete": => @complete()
 
-    complete: ->
-        buffer = ""
-        editor = atom.workspace.getActivePaneItem()
-        cursor = editor.cursors[0]
-        text = editor.getSelections()[0].getText()
+    addTemplate: (templateInfo) ->
+        @templates[templateInfo.name] = templateInfo
+        console.log "Template added: ", templateInfo
+        console.log @templates
 
-        classdef = @parseClassdef(text)
-        console.log classdef
+    getTemplates: ->
+        return @templates
 
-        fileName = editor.getFileName()
-        if fileName
-            fileName = fileName.split(".")[..].pop()
-            completed = false
-            for key of @templates
-                if key == fileName.toLowerCase()
-                    buffer += @templates[key].complete.generateClass(classdef)
-                    completed = true
-            if !completed
-                buffer += @templates["js"].complete.generateClass(classdef)
-        else
-            buffer += @templates["js"].complete.generateClass(classdef)
+    provideClasscomplete: ->
+        console.log "Providing service"
+        return @addTemplate.bind(@)
 
-        editor.insertText buffer
-
-    parseClassdef: (string) ->
-        # <class_name>:<arguments>,...;<methods>,...:<extend>
-        def = {
-            fullname: null
-            name: null,
-            parameters: [],
-            methods: [],
-            extends: null
-        }
-
-        fullname = string.split(":")[0]
-
-        def.fullname = fullname
-
-        string = string.replace(/\s/g, "")
-        parts = string.split(":")
-
-        if parts.length > 0
-            def.name = parts[0]
-            if parts.length > 1
-                parameth = parts[1].split(";")
-                parameters = parameth[0]
-                methods = parameth[1]
-
-                if parameters
-                    def.parameters = @parseParameters(parameters)
-
-                if methods
-
-                    methods2 = methods.split("/")
-                    for method in methods2
-                        meth = {
-                            name: null,
-                            parameters: []
-                            type: "method"
-                        }
-
-                        if method[0] == "@"
-                            meth.type = "static"
-                            method = method.substr(1, method.length - 1)
-
-                        methsplit = method.split("+")
-                        meth.name = methsplit[0] if methsplit.length > 0
-
-                        meth.parameters = @parseParameters(methsplit[1]) if methsplit.length > 1
-
-                        def.methods.push(meth) if meth.name
-
-            if parts.length > 2
-                def.extends = parts[2]
-
-        return def
-
-    parseParameters: (string) ->
-        params = []
-
-        string = string.replace(/\s/g, "").split(",")
-
-        for part in string
-            param = {
-                name: null
-                type: null
-                instance: null
-                member: false
-                modes: []
-            }
-
-            parts = part.split("~")
-            if parts.length > 1
-                param.modes = parts[1].split("")
-                part = parts[0]
-
-            if part[0] == "@"
-                param.member = true
-                part = part.substr(1, part.length - 1)
-
-            if part.split("!").length > 1
-                split = part.split("!")
-
-                param.name = split[0]
-                param.type = split[1]
-            else if part.split("^").length > 1
-                split = part.split("^")
-
-                param.name = split[0]
-                param.instance = split[1]
-            else
-                param.name = part
-
-            params.push(param)
-
-        return params
-
-module.exports = new Complete
+complete = new Complete
+module.exports = complete

@@ -1,10 +1,8 @@
 
-Template = require "./template.coffee"
-
-class JavascriptTemplate extends Template
+class JavascriptTemplate
 
     constructor: ->
-        super
+        @tabString = "\t"
 
     generateClass: (classdef) ->
         buffer = ""
@@ -85,6 +83,18 @@ class JavascriptTemplate extends Template
             buffer += "#{@indent(body.after, 1)}"
 
         buffer += "}"
+
+        return buffer
+
+    indent: (text, indent) ->
+        buffer = ""
+        lines = text.split(/\n|\r\n/)
+
+        prefix = ""
+        prefix += "#{@tabString}" for i in [0..indent - 1]
+
+        for line in lines
+            buffer += prefix + line + "\n"
 
         return buffer
 
