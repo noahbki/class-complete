@@ -7,7 +7,7 @@ class CoffeeTemplate
     generateClass: (classdef) ->
         buffer = ""
         buffer += "class #{classdef.fullname}"
-        buffer += " extends #{classdef.extends}\n\n" if classdef.extends
+        buffer += " extends #{classdef.extends}" if classdef.extends
 
         buffer += @indent(@generateMethod(classdef.name, null, classdef.parameters, "constructor", {
             "before": "super" if classdef.extends
@@ -19,15 +19,16 @@ class CoffeeTemplate
                 method = classdef.methods[method]
                 buffer += @indent(@generateMethod(classdef.name, method.name, method.parameters, method.type), 1)
 
-        buffer
+        buffer.substr(0, buffer.length - 2)
 
     generateMethod: (className, method, parameters, type = "member", body = {}) ->
+        buffer = ""
         if type == "static"
-            buffer = "@#{method}: ("
+            buffer += "@#{method}: ("
         else if type == "method"
-            buffer = "#{method}: ("
+            buffer += "#{method}: ("
         else if type == "constructor"
-            buffer = "constructor: ("
+            buffer += "\nconstructor: ("
 
         if parameters.length > 0
             for param in [0..parameters.length - 1]

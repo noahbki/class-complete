@@ -1,7 +1,7 @@
 
 class CompleteHandler
 	constructor: ->
-	
+
 	complete: (completeInstance) ->
 		@templates = completeInstance.templates
 		buffer = ""
