@@ -1,6 +1,7 @@
 
 class CompleteHandler
 	constructor: ->
+		@default = "js"
 
 	complete: (completeInstance) ->
 		@templates = completeInstance.templates
