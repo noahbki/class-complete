@@ -1,7 +1,7 @@
 {
   "name": "class-complete",
   "main": "./lib/class-complete",
-  "version": "6.2.1",
+  "version": "6.2.2",
   "description": "Easily generate classes and methods.",
   "repository": "https://github.com/anotherfrog/class-complete",
   "license": "MIT",
