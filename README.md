@@ -1,7 +1,7 @@
 
 # Class Complete
 
-Class Complete is a plugin for Atom, that allows the user to easily generate classes.
+Class Complete is a plugin for the Atom text editor, and allows users to easily generate code from shorthand.
 
 ## Table of Contents
 - [How-To](#how-to)
